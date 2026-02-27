@@ -35,14 +35,14 @@ func resetRootCmd() {
 
 	// Point the config flag at a non-existent file so initConfig does
 	// not read the real ~/.bugsnag-cli.yaml.
-	rootCmd.PersistentFlags().Set("config", "/dev/null/nonexistent.yaml")
+	_ = rootCmd.PersistentFlags().Set("config", "/dev/null/nonexistent.yaml")
 
 	// Reset all persistent flags to defaults.
-	rootCmd.PersistentFlags().Set("api-token", "")
-	rootCmd.PersistentFlags().Set("format", "json")
-	rootCmd.PersistentFlags().Set("per-page", "30")
-	rootCmd.PersistentFlags().Set("all-pages", "false")
-	rootCmd.PersistentFlags().Set("base-url", "https://api.bugsnag.com")
+	_ = rootCmd.PersistentFlags().Set("api-token", "")
+	_ = rootCmd.PersistentFlags().Set("format", "json")
+	_ = rootCmd.PersistentFlags().Set("per-page", "30")
+	_ = rootCmd.PersistentFlags().Set("all-pages", "false")
+	_ = rootCmd.PersistentFlags().Set("base-url", "https://api.bugsnag.com")
 
 	// Also clear any environment variables that might interfere.
 	os.Unsetenv("BUGSNAG_API_TOKEN")
@@ -51,10 +51,10 @@ func resetRootCmd() {
 	os.Unsetenv("BUGSNAG_PER_PAGE")
 
 	// Re-bind flags to viper since we reset viper.
-	viper.BindPFlag("api_token", rootCmd.PersistentFlags().Lookup("api-token"))
-	viper.BindPFlag("format", rootCmd.PersistentFlags().Lookup("format"))
-	viper.BindPFlag("per_page", rootCmd.PersistentFlags().Lookup("per-page"))
-	viper.BindPFlag("base_url", rootCmd.PersistentFlags().Lookup("base-url"))
+	_ = viper.BindPFlag("api_token", rootCmd.PersistentFlags().Lookup("api-token"))
+	_ = viper.BindPFlag("format", rootCmd.PersistentFlags().Lookup("format"))
+	_ = viper.BindPFlag("per_page", rootCmd.PersistentFlags().Lookup("per-page"))
+	_ = viper.BindPFlag("base_url", rootCmd.PersistentFlags().Lookup("base-url"))
 
 	viper.SetDefault("format", "json")
 	viper.SetDefault("per_page", 30)
@@ -66,28 +66,12 @@ func resetRootCmd() {
 // do not leak into the next one.
 func resetSubcommandFlags(cmd *cobra.Command) {
 	cmd.Flags().VisitAll(func(f *pflag.Flag) {
-		f.Value.Set(f.DefValue)
+		_ = f.Value.Set(f.DefValue)
 		f.Changed = false
 	})
 	for _, child := range cmd.Commands() {
 		resetSubcommandFlags(child)
 	}
-}
-
-// executeCommand runs rootCmd with the given args and captures stdout.
-// Returns the captured output and any error from command execution.
-func executeCommand(args ...string) (string, error) {
-	buf := new(bytes.Buffer)
-	rootCmd.SetOut(buf)
-	rootCmd.SetErr(buf)
-	rootCmd.SetArgs(args)
-
-	_, err := rootCmd.ExecuteC()
-
-	// Cobra writes to the command's OutOrStdout when using Print* helpers,
-	// but our code writes to os.Stdout / Printer.Out.  We capture output by
-	// temporarily redirecting os.Stdout.
-	return buf.String(), err
 }
 
 // executeCommandCapture redirects os.Stdout to capture output from Printer,
@@ -106,7 +90,7 @@ func executeCommandCapture(args ...string) (string, error) {
 	os.Stdout = oldStdout
 
 	var buf bytes.Buffer
-	buf.ReadFrom(r)
+	_, _ = buf.ReadFrom(r)
 	return buf.String(), err
 }
 

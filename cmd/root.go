@@ -81,7 +81,7 @@ func initConfig() {
 	viper.SetEnvPrefix("BUGSNAG")
 	viper.AutomaticEnv()
 
-	viper.ReadInConfig()
+	_ = viper.ReadInConfig()
 }
 
 func getAPIToken() (string, error) {
