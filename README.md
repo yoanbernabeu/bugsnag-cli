@@ -58,6 +58,16 @@ go build -o bugsnag .
 
 ---
 
+## Agent Skills
+
+Install the bugsnag-cli skill to let your AI coding agent use the CLI. Compatible with [Claude Code](https://claude.com/claude-code), [Cursor](https://cursor.com), [Codex](https://openai.com/codex), [GitHub Copilot](https://github.com/features/copilot), [Windsurf](https://windsurf.com), and [more](https://github.com/rohitg00/skillkit):
+
+```bash
+npx skills add https://github.com/yoanbernabeu/bugsnag-cli --skill bugsnag-cli
+```
+
+---
+
 ## Getting your API Token
 
 1. Log in to [Bugsnag](https://app.bugsnag.com)
