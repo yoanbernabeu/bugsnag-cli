@@ -1,0 +1,23 @@
+# Binary
+bugsnag
+bugsnag.exe
+dist/
+
+# Go
+*.test
+*.out
+vendor/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Config (may contain tokens)
+.bugsnag-cli.yaml
