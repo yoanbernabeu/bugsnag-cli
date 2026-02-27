@@ -60,10 +60,10 @@ func init() {
 	rootCmd.PersistentFlags().BoolP("all-pages", "a", false, "Fetch all pages of results")
 	rootCmd.PersistentFlags().String("base-url", "https://api.bugsnag.com", "Bugsnag API base URL")
 
-	viper.BindPFlag("api_token", rootCmd.PersistentFlags().Lookup("api-token"))
-	viper.BindPFlag("format", rootCmd.PersistentFlags().Lookup("format"))
-	viper.BindPFlag("per_page", rootCmd.PersistentFlags().Lookup("per-page"))
-	viper.BindPFlag("base_url", rootCmd.PersistentFlags().Lookup("base-url"))
+	_ = viper.BindPFlag("api_token", rootCmd.PersistentFlags().Lookup("api-token"))
+	_ = viper.BindPFlag("format", rootCmd.PersistentFlags().Lookup("format"))
+	_ = viper.BindPFlag("per_page", rootCmd.PersistentFlags().Lookup("per-page"))
+	_ = viper.BindPFlag("base_url", rootCmd.PersistentFlags().Lookup("base-url"))
 }
 
 func initConfig() {
