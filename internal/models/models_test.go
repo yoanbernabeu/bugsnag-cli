@@ -1,6 +1,9 @@
 package models
 
-import "testing"
+import (
+	"encoding/json"
+	"testing"
+)
 
 // ---------------------------------------------------------------------------
 // Existing tests (preserved)
@@ -614,5 +617,21 @@ func TestBugsnagErrorTableRow_AllFields(t *testing.T) {
 	}
 	if row[5] != "2024-12-31" {
 		t.Errorf("expected last_seen '2024-12-31', got %q", row[5])
+	}
+}
+
+func TestIssueNumberAcceptsStringOrNumber(t *testing.T) {
+	cases := map[string]string{
+		`{"number":"BUG-42"}`: "BUG-42",
+		`{"number":569}`:      "569",
+	}
+	for input, want := range cases {
+		var issue Issue
+		if err := json.Unmarshal([]byte(input), &issue); err != nil {
+			t.Fatalf("unmarshal %s: %v", input, err)
+		}
+		if string(issue.Number) != want {
+			t.Errorf("unmarshal %s: Number = %q, want %q", input, issue.Number, want)
+		}
 	}
 }

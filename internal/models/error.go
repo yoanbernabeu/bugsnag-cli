@@ -1,5 +1,10 @@
 package models
 
+import (
+	"bytes"
+	"encoding/json"
+)
+
 type BugsnagError struct {
 	ID              string `json:"id"`
 	ProjectID       string `json:"project_id"`
@@ -31,9 +36,26 @@ type BugsnagError struct {
 
 type Issue struct {
 	ID     string `json:"id"`
-	Number string `json:"number"`
+	Number FlexString `json:"number"`
 	Type   string `json:"type"`
 	URL    string `json:"url"`
+}
+
+// FlexString decodes a JSON string or number into a string.
+// Bugsnag sends Issue.number as a number for some trackers (e.g. GitHub).
+type FlexString string
+
+func (f *FlexString) UnmarshalJSON(data []byte) error {
+	if len(data) > 0 && data[0] == '"' {
+		var s string
+		if err := json.Unmarshal(data, &s); err != nil {
+			return err
+		}
+		*f = FlexString(s)
+		return nil
+	}
+	*f = FlexString(bytes.TrimSpace(data))
+	return nil
 }
 
 type ErrorOverrides struct {
